@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des Patients</h1>
+    <a href="{{ path('patient_new') }}">Ajouter un nouveau patient</a>
+    <table>
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Date de Naissance</th>
+            <th>Genre</th>
+            <th>Adresse</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patient in patients %}
+            <tr>
+                <td>{{ patient.username }}</td>
+                <td>{{ patient.dob|date('d/m/Y') }}</td>
+                <td>{{ patient.gender }}</td>
+                <td>{{ patient.address }}</td>
+                <td>{{ patient.email }}</td>
+
+                <td>
+                    <a href="{{ path('patient_show', { 'id': patient.id }) }}">Voir</a>
+                    <a href="{{ path('patient_edit', { 'id': patient.id }) }}">Modifier</a>
+                    <form method="post" action="{{ path('patient_delete', { 'id': patient.id }) }}" style="display:inline-block;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ patient.id) }}">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

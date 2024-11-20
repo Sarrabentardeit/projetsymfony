@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des Rendez-vous</h1>
+    <a href="{{ path('appointment_new') }}">Prendre un rendez-vous</a>
+    <table>
+        <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Médecin</th>
+            <th>Date et Heure</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.patient.username }}</td>
+                <td>{{ appointment.doctor.username }}</td>
+                <td>{{ appointment.dateTime|date('d/m/Y H:i') }}</td>
+                <td>{{ appointment.status }}</td>
+                <td>
+                    <a href="{{ path('appointment_show', { id: appointment.id }) }}">Voir</a>
+                    <a href="{{ path('appointment_edit', { id: appointment.id }) }}">Modifier</a>
+                    <form method="post" action="{{ path('appointment_delete', { id: appointment.id }) }}" style="display:inline-block;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ appointment.id) }}">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
