@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un Compte{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Créer un Compte</h1>
+
+        <!-- Affichage des messages flash -->
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <!-- Affichage des erreurs globales -->
+        <div class="mb-3">
+            {{ form_errors(registrationForm) }}
+        </div>
+
+        <!-- Début du formulaire -->
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+
+                <!-- Champ Username -->
+                <div class="mb-3">
+                    {{ form_label(registrationForm.username, 'Nom d\'utilisateur', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(registrationForm.username) }}
+                </div>
+
+                <!-- Champ Email -->
+                <div class="mb-3">
+                    {{ form_label(registrationForm.email, 'Adresse Email', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                <!-- Champ Password -->
+                <div class="mb-3">
+                    {{ form_label(registrationForm.plainPassword, 'Mot de Passe', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+
+                <!-- Champ Roles -->
+                <div class="mb-3">
+                    {{ form_label(registrationForm.roles, 'Rôles', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.roles, {'attr': {'class': 'form-check-inline'}}) }}
+                    {{ form_errors(registrationForm.roles) }}
+                </div>
+
+                <!-- Champs spécifiques pour Docteur -->
+                <div id="doctor-fields" style="display: none;">
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.specialization, 'Spécialisation', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.specialization, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.specialization) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.licenseNumber, 'Numéro de Licence', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.licenseNumber, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.licenseNumber) }}
+                    </div>
+                </div>
+
+                <!-- Champs spécifiques pour Patient -->
+                <div id="patient-fields" style="display: none;">
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.dob, 'Date de Naissance', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.dob, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.dob) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.address, 'Adresse', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.address, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.address) }}
+                    </div>
+                </div>
+
+                <!-- Champ Terms & Conditions -->
+                <div class="form-check mb-3">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(registrationForm.agreeTerms, 'J\'accepte les termes et conditions', {'label_attr': {'class': 'form-check-label'}}) }}
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+
+                <!-- Bouton d'envoi -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+                </div>
+
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript pour gérer les champs dynamiques -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const roleDoctor = document.querySelector('input[value="ROLE_DOCTOR"]');
+            const rolePatient = document.querySelector('input[value="ROLE_PATIENT"]');
+
+            const doctorFields = document.getElementById("doctor-fields");
+            const patientFields = document.getElementById("patient-fields");
+
+            roleDoctor.addEventListener("change", function () {
+                if (this.checked) {
+                    doctorFields.style.display = "block";
+                    patientFields.style.display = "none";
+                }
+            });
+
+            rolePatient.addEventListener("change", function () {
+                if (this.checked) {
+                    doctorFields.style.display = "none";
+                    patientFields.style.display = "block";
+                }
+            });
+        });
+    </script>
+{% endblock %}

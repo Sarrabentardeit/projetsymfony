@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prescription Index{% endblock %}
+
+{% block body %}
+    <h1>Liste des Prescriptions</h1>
+
+    <!-- Table des prescriptions existantes -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Médicament</th>
+            <th>Dosage</th>
+            <th>Date de début</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for prescription in prescriptions %}
+            <tr>
+                <td>{{ prescription.id }}</td>
+                <td>{{ prescription.medication }}</td>
+                <td>{{ prescription.dosage }}</td>
+                <td>{{ prescription.startDate ? prescription.startDate|date('Y-m-d') : 'Non définie' }}</td>
+                <td>
+                    <a href="{{ path('app_prescription_show', {'id': prescription.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                    <a href="{{ path('app_prescription_edit', {'id': prescription.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">Aucune prescription trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Section pour créer une nouvelle prescription -->
+    <h2 class="mt-4">Créer une Prescription</h2>
+    {% if medical_records is not empty %}
+        <ul class="list-group">
+            {% for medical_record in medical_records %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Dossier Médical ID: {{ medical_record.id }}
+                    <a href="{{ path('app_prescription_new', { 'medicalRecordId': medical_record.id }) }}" class="btn btn-primary btn-sm">
+                        Créer une Prescription
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center text-muted">Aucun dossier médical disponible pour créer une prescription.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord - Administrateur{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <!-- Titre principal -->
+        <h1 class="text-center mb-4">Tableau de bord Administrateur</h1>
+
+        <!-- Section des actions -->
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ path('patient_index') }}" class="btn btn-primary">
+                <i class="bi bi-people"></i> Gérer les Patients
+            </a>
+            <a href="{{ path('app_medical_record_index') }}" class="btn btn-secondary">
+                <i class="bi bi-file-medical"></i> Gérer les Dossiers Médicaux
+            </a>
+            <a href="{{ path('app_prescription_index') }}" class="btn btn-success">
+                <i class="bi bi-prescription2"></i> Gérer les Prescriptions
+            </a>
+        </div>
+        <!-- Bouton pour accéder au formulaire de création de compte -->
+        <div class="text-center mt-4">
+            <a href="{{ path('app_register') }}" class="btn btn-warning">
+                <i class="bi bi-person-plus"></i> Créer un Compte
+            </a>
+        </div>
+    </div>
+{% endblock %}

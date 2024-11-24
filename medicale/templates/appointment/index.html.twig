@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Rendez-vous{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Liste des Rendez-vous</h1>
+
+        <!-- Bouton pour prendre un rendez-vous -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{{ path('appointment_new') }}" class="btn btn-primary">Prendre un Rendez-vous</a>
+        </div>
+
+        <!-- Tableau des rendez-vous -->
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Patient</th>
+                <th>Médecin</th>
+                <th>Date et Heure</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient.getUsername() }}</td>
+                    <td>{{ appointment.doctor.getUsername() }}</td>
+                    <td>{{ appointment.dateTime|date('d/m/Y H:i') }}</td>
+                    <td>
+                    <span class="badge {% if appointment.status == 'Confirmé' %}bg-success{% elseif appointment.status == 'Annulé' %}bg-danger{% else %}bg-warning{% endif %}">
+                        {{ appointment.status }}
+                    </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('appointment_show', { id: appointment.id }) }}" class="btn btn-info btn-sm">Voir</a>
+                        <a href="{{ path('appointment_edit', { id: appointment.id }) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        <form method="post" action="{{ path('appointment_delete', { id: appointment.id }) }}" style="display:inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ appointment.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce rendez-vous ?')">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">Aucun rendez-vous trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dossiers médicaux pour le patient #{{ patientId }}{% endblock %}
+
+{% block body %}
+    <h1>Dossiers médicaux pour le patient #{{ patientId }}</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Diagnostic</th>
+            <th>Plan de traitement</th>
+            <th>Date de création</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for medical_record in medical_records %}
+            <tr>
+                <td>{{ medical_record.id }}</td>
+                <td>{{ medical_record.diagnosis }}</td>
+                <td>{{ medical_record.treatmentPlan }}</td>
+                <td>{{ medical_record.createdDate ? medical_record.createdDate|date('Y-m-d') : 'Non spécifiée' }}</td>
+                <td>
+                    <a href="{{ path('app_medical_record_show', {'id': medical_record.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                    <a href="{{ path('app_medical_record_edit', {'id': medical_record.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    <form method="post" action="{{ path('app_medical_record_delete', {'id': medical_record.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ medical_record.id) }}">
+                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">Aucun dossier médical trouvé pour ce patient.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('doctor_dashboard') }}" class="btn btn-secondary">Retour au tableau de bord</a>
+{% endblock %}
